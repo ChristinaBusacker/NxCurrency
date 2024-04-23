@@ -4,9 +4,7 @@ import { HttpService } from '@nestjs/axios';
 import { map } from 'rxjs/operators';
 import { Currency, FreecurrencyapiResponse } from '@shared/interfaces/currency.interfaces'
 import { Observable, of } from 'rxjs';
-import { CacheModule } from '@nestjs/cache-manager';
 import { CachingService } from '../../../common/caching/caching.service';
-
 
 
 @Injectable()

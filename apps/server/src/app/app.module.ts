@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { CurrencyModule } from './modules/currency/currency.module';
 import { ConfigModule } from '@nestjs/config';
 import { CachingModule } from './common/caching/caching.module';
@@ -12,9 +11,8 @@ import { CachingModule } from './common/caching/caching.module';
       isGlobal: true,
     }),
     CurrencyModule,
-    CachingModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [],
 }) //
-export class AppModule {}
+export class AppModule { }
