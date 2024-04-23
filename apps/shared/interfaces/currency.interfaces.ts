@@ -1,5 +1,5 @@
-export interface FreecurrencyapiResponse {
-    data: { [key: string]: Currency };
+export interface FreecurrencyapiResponse<T> {
+    data: { [key: string]: T };
 }
 
 export interface Currency {

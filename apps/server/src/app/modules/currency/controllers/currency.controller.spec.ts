@@ -1,9 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { of, throwError } from 'rxjs';
+import { lastValueFrom, of, throwError } from 'rxjs';
 import { CurrencyController } from './currency.controller';
 import { CurrencyService } from '../services/currency.service';
-import { HttpService } from '@nestjs/axios';
-import { ConfigService } from '@nestjs/config';
 
 describe('CurrencyController', () => {
   let controller: CurrencyController;
@@ -13,28 +11,13 @@ describe('CurrencyController', () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [CurrencyController],
       providers: [
-        CurrencyService,
         {
-          provide: HttpService,
+          provide: CurrencyService,
           useValue: {
-            get: jest.fn(() => of({
-              data: { USD: { symbol: '$', name: 'US Dollar', decimal_digits: 2, code: 'USD' } },
-              status: 200,
-              statusText: 'OK',
-              headers: {},
-              config: {},
-            }))
+            getAvailableCurrencies: jest.fn(),
+            convertCurrency: jest.fn()
           },
         },
-        {
-          provide: ConfigService,
-          useValue: {
-            get: jest.fn().mockImplementation(key => {
-              if (key === 'FREECURRENCYAPI_URL') return 'http://api.example.com';
-              if (key === 'FREECURRENCYAPI_KEY') return 'apikey123';
-            })
-          }
-        }
       ]
     }).compile();
 
@@ -46,12 +29,12 @@ describe('CurrencyController', () => {
     expect(controller).toBeDefined();
   });
 
-  describe('getData', () => {
+  describe('getAvailableCurrencies', () => {
     it('should return successful ApiResponse when currencies are fetched successfully', async () => {
       const expectedResult = [{ symbol: '$', name: 'US Dollar', decimal_digits: 2, code: 'USD' }];
       jest.spyOn(currencyService, 'getAvailableCurrencies').mockReturnValue(of(expectedResult));
 
-      const result = await controller.getData().toPromise();
+      const result = await lastValueFrom(controller.getAvailableCurrencies());
 
       expect(result.data).toEqual(expectedResult);
       expect(result.error).toBeUndefined();
@@ -62,7 +45,41 @@ describe('CurrencyController', () => {
       const errorMessage = 'Failed to get currencies';
       jest.spyOn(currencyService, 'getAvailableCurrencies').mockReturnValue(throwError(() => new Error(errorMessage)));
 
-      const result = await controller.getData().toPromise();
+      const result = await lastValueFrom(controller.getAvailableCurrencies());
+
+      expect(result.error).toEqual(errorMessage);
+      expect(result.data).toBeNull();
+      expect(result.timestamp).toBeInstanceOf(Date);
+    });
+  });
+
+  describe('convertCurrency', () => {
+    it('should handle currency conversion successfully', async () => {
+      const body = { amount: 100, fromCurrency: 'USD', toCurrency: 'EUR' };
+      const convertedAmount = 90;
+      jest.spyOn(currencyService, 'convertCurrency').mockReturnValue(of(convertedAmount));
+
+      const result = await lastValueFrom(controller.convertCurrency(body));
+
+      expect(result.data).toEqual(convertedAmount);
+      expect(result.error).toBeUndefined();
+      expect(result.timestamp).toBeInstanceOf(Date);
+    });
+
+    it('should return error ApiResponse when missing required fields', async () => {
+      const body = { amount: 100 }; // Missing fromCurrency and toCurrency
+      const result = await lastValueFrom(controller.convertCurrency(body as any));
+
+      expect(result.error).toEqual('Missing required fields: amount, fromCurrency, or toCurrency.');
+      expect(result.data).toBeNull();
+    });
+
+    it('should return error ApiResponse when service throws an error', async () => {
+      const body = { amount: 100, fromCurrency: 'USD', toCurrency: 'EUR' };
+      const errorMessage = 'Failed to convert currency';
+      jest.spyOn(currencyService, 'convertCurrency').mockReturnValue(throwError(() => new Error(errorMessage)));
+
+      const result = await lastValueFrom(controller.convertCurrency(body));
 
       expect(result.error).toEqual(errorMessage);
       expect(result.data).toBeNull();

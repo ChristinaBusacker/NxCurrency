@@ -9,7 +9,7 @@ export class CurrencyConversionService {
     return amount * 2.13
   }
 
-  public getAvailibleCurrencies(): Array<string> {
+  public getAvailibleCurrencies(): string[] {
     return []
   }
 }
