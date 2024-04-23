@@ -1,1 +1,19 @@
-<p>calculator works!</p>
+<div>
+    <input type="number" [formControl]="inputValueControl" step="0.01" pattern="^\d*(\.\d{0,2})?$"/>
+    <select [formControl]="inputCurrencyControl">
+        <option value="EUR">€</option>
+        <option value="USD">$</option>
+    </select>
+</div>
+
+<button class="switch" (click)="switchcurrencies()">
+    <img class="switch__img"src="assets/arrow-left-right-fill.svg" />
+</button>
+
+<div>
+    <input type="number" [formControl]="outputValueControl" pattern="^\d*(\.\d{0,2})?$"/>
+    <select [formControl]="outputCurrencyControl">
+        <option value="EUR">€</option>
+        <option value="USD">$</option>
+    </select>
+</div>
