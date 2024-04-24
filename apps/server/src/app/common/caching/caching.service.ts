@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Currency } from '@shared/interfaces/currency.interfaces';
+import { Currency } from '@shared/interfaces/currency.interface';
 
 
 interface CurrencyRateCache {

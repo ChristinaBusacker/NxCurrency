@@ -2,7 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { HttpService } from '@nestjs/axios';
 import { map } from 'rxjs/operators';
-import { Currency, FreecurrencyapiResponse } from '@shared/interfaces/currency.interfaces'
+import { Currency } from '@shared/interfaces/currency.interface'
+import { FreecurrencyapiResponse } from '@shared/interfaces/freecurrencyapiResponse.interface'
 import { Observable, of } from 'rxjs';
 import { CachingService } from '../../../common/caching/caching.service';
 

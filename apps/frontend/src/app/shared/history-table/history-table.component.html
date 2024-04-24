@@ -1,0 +1,18 @@
+<table>
+    <thead>
+        <tr>
+            <th>Input Value</th>
+            <th>Input Currency</th>
+            <th>Output Value</th>
+            <th>Output Currency</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let entry of history">
+            <td>{{entry.inputAmount}}</td>
+            <td>{{entry.inputCurrency}}</td>
+            <td>{{entry.outputAmount}}</td>
+            <td>{{entry.outputCurrency}}</td>
+        </tr>
+    </tbody>
+</table>

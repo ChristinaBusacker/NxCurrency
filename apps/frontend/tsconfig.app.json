@@ -3,9 +3,6 @@
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
     "types": [],
-    "paths": {
-      "@shared/*": ["apps/shared/*"]
-    }
   },
   "files": ["src/main.ts"],
   "include": ["src/**/*.d.ts"],

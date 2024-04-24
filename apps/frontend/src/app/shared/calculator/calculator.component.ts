@@ -4,8 +4,10 @@ import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Observable, combineLatest, debounceTime, map, of, startWith } from 'rxjs';
 import { CoreModule } from '../../core/core.module';
 import { CurrencyConversionService } from '../../core/services/currency-conversion/currency-conversion.service';
-import { Currency } from '@shared/interfaces/currency.interfaces'
+import { Currency } from '@shared/interfaces/currency.interface'
 import { ApiResponse } from '@shared/models/api-response.dto'
+import { HistoryService } from '../../core/services/history/history.service';
+
 @Component({
   selector: 'app-calculator',
   standalone: true,
@@ -19,9 +21,19 @@ export class CalculatorComponent implements OnInit {
   public outputValueControl = new FormControl({ value: 0, disabled: true });
   public outputCurrencyControl = new FormControl('USD');
 
-  public availableCurrencies: Observable<ApiResponse<Currency[]>> = of(new ApiResponse([]))
+  public defaultOptions = [
+    { symbol: "€", name: "Euro", decimal_digits: 2, code: "EUR" },
+    { symbol: "$", name: "US Dollar", decimal_digits: 2, code: "USD" },
+    { symbol: "£", name: "British Pound Sterling", decimal_digits: 2, code: "GBP" }
+  ]
+  private availableCurrencies: Currency[] = [];
+  public availableCurrencies$: Observable<ApiResponse<Currency[]>> = of(new ApiResponse([]))
 
-  constructor(public currencyConversionService: CurrencyConversionService) { }
+  constructor(public currencyConversionService: CurrencyConversionService, private historyService: HistoryService) { }
+
+  private convertCurrency(amount: number, fromCurrency: string, toCurrency: string): Observable<number | null> {
+    return this.currencyConversionService.convertCurrency(amount, fromCurrency, toCurrency)
+  }
 
   public switchcurrencies(): void {
     /*
@@ -39,10 +51,6 @@ export class CalculatorComponent implements OnInit {
     this.outputCurrencyControl.setValue(inpCur, { emitEvent: false });
   }
 
-  private convertCurrency(amount: number, fromCurrency: string, toCurrency: string): Observable<ApiResponse<number>> {
-    return this.currencyConversionService.convertCurrency(amount, fromCurrency, toCurrency)
-  }
-
   public ngOnInit() {
     /*
       I decided to use rxjs for that operation, because it is the Angular 
@@ -57,17 +65,17 @@ export class CalculatorComponent implements OnInit {
       this.outputCurrencyControl.valueChanges.pipe(startWith(this.outputCurrencyControl.value)),
     ]).pipe(
       map(([amount, fromCurrency, toCurrency]) => {
-        this.convertCurrency(amount || 0, fromCurrency || 'EUR', toCurrency || 'USD').subscribe((response) => {
-          if (response.success && response.data) {
-            const convertedAmount = response.data
-            const outputAmount = parseFloat(convertedAmount.toFixed(2))
+        this.convertCurrency(amount || 0, fromCurrency || 'EUR', toCurrency || 'USD').subscribe((amount) => {
+          if (amount) {
+            const outputAmount = parseFloat(amount.toFixed(2))
             this.outputValueControl.setValue(outputAmount);
           }
         })
       })
     ).subscribe();
 
-    // TODO: REMOVE
-    this.availableCurrencies = this.currencyConversionService.getAvailableCurrencies()
+
+    this.currencyConversionService.getAvailableCurrencies()
+      .subscribe((currencies: Currency[]) => this.availableCurrencies = currencies)
   }
 }
