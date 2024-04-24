@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BehaviorSubject, combineLatest, combineLatestAll, combineLatestWith, debounceTime, distinctUntilChanged, map, pipe, startWith } from 'rxjs';
+import { Observable, combineLatest, debounceTime, map, of, startWith } from 'rxjs';
 import { CoreModule } from '../../core/core.module';
 import { CurrencyConversionService } from '../../core/services/currency-conversion/currency-conversion.service';
-
+import { Currency } from '@shared/interfaces/currency.interfaces'
+import { ApiResponse } from '@shared/models/api-response.dto'
 @Component({
   selector: 'app-calculator',
   standalone: true,
@@ -17,6 +18,8 @@ export class CalculatorComponent implements OnInit {
   public inputCurrencyControl = new FormControl('EUR');
   public outputValueControl = new FormControl({ value: 0, disabled: true });
   public outputCurrencyControl = new FormControl('USD');
+
+  public availableCurrencies: Observable<ApiResponse<Currency[]>> = of(new ApiResponse([]))
 
   constructor(public currencyConversionService: CurrencyConversionService) { }
 
@@ -36,8 +39,8 @@ export class CalculatorComponent implements OnInit {
     this.outputCurrencyControl.setValue(inpCur, { emitEvent: false });
   }
 
-  private convertCurrency(amount: number, fromCurrency: string, toCurrency: string): number {
-    return this.currencyConversionService.calculate(amount, fromCurrency, toCurrency)
+  private convertCurrency(amount: number, fromCurrency: string, toCurrency: string): Observable<ApiResponse<number>> {
+    return this.currencyConversionService.convertCurrency(amount, fromCurrency, toCurrency)
   }
 
   public ngOnInit() {
@@ -54,11 +57,17 @@ export class CalculatorComponent implements OnInit {
       this.outputCurrencyControl.valueChanges.pipe(startWith(this.outputCurrencyControl.value)),
     ]).pipe(
       map(([amount, fromCurrency, toCurrency]) => {
-        return this.convertCurrency(amount || 0, fromCurrency || 'EUR', toCurrency || 'USD');
+        this.convertCurrency(amount || 0, fromCurrency || 'EUR', toCurrency || 'USD').subscribe((response) => {
+          if (response.success && response.data) {
+            const convertedAmount = response.data
+            const outputAmount = parseFloat(convertedAmount.toFixed(2))
+            this.outputValueControl.setValue(outputAmount);
+          }
+        })
       })
-    ).subscribe(convertedAmount => {
-      const outputAmount = parseFloat(convertedAmount.toFixed(2))
-      this.outputValueControl.setValue(outputAmount);
-    });
+    ).subscribe();
+
+    // TODO: REMOVE
+    this.availableCurrencies = this.currencyConversionService.getAvailableCurrencies()
   }
 }

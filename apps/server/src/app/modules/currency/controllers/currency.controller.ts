@@ -23,13 +23,13 @@ export class CurrencyController {
     }
     @Post('convert')
     convertCurrency(
-        @Body() body: { amount: number; fromCurrency: string; toCurrency: string }
+        @Body() body: { amount: number; fromCurrency: string; targetCurrency: string }
     ) {
-        if (!body.amount || !body.fromCurrency || !body.toCurrency) {
+        if (!body.amount || !body.fromCurrency || !body.targetCurrency) {
             return of(ApiResponse.fail('Missing required fields: amount, fromCurrency, or toCurrency.'))
         }
 
-        return this.currencyService.convertCurrency(body.amount, body.fromCurrency, body.toCurrency).pipe(
+        return this.currencyService.convertCurrency(body.amount, body.fromCurrency, body.targetCurrency).pipe(
             map((result) => ApiResponse.success(result)),
             catchError(() => of(ApiResponse.fail('Failed to convert currency')))
         );

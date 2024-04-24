@@ -1,10 +1,10 @@
 export class ApiResponse<T> {
-    data?: T;
+    data?: T | null;
     error?: any;
     success = true;
     timestamp: Date = new Date();
 
-    constructor(data: T = null, error?: any) {
+    constructor(data: T | null = null, error?: any) {
         this.data = data;
         this.error = error;
 

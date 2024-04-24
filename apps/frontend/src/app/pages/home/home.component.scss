@@ -1,0 +1,27 @@
+@import '../../scss/viewport.scss';
+
+:host {
+    display:block;
+    & .hero {
+        background-color: #04151f;
+        display:flex;
+        justify-content: center;
+    }
+
+    & .calculator {
+        background-color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid white;
+        border-radius: 4px;
+        width: 97%;
+        min-width:30rem;
+        max-width:58rem;
+        margin: 0 auto;
+        margin-top: -30px;
+        z-index: 99;
+        position: relative;
+        padding: 20px 10px;
+    }
+}

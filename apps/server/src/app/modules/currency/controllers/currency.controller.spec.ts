@@ -55,7 +55,7 @@ describe('CurrencyController', () => {
 
   describe('convertCurrency', () => {
     it('should handle currency conversion successfully', async () => {
-      const body = { amount: 100, fromCurrency: 'USD', toCurrency: 'EUR' };
+      const body = { amount: 100, fromCurrency: 'USD', targetCurrency: 'EUR' };
       const convertedAmount = 90;
       jest.spyOn(currencyService, 'convertCurrency').mockReturnValue(of(convertedAmount));
 
@@ -66,7 +66,7 @@ describe('CurrencyController', () => {
       expect(result.timestamp).toBeInstanceOf(Date);
     });
 
-    it('should return error ApiResponse when missing required fields', async () => {
+    it('should return error in ApiResponse when missing required fields', async () => {
       const body = { amount: 100 }; // Missing fromCurrency and toCurrency
       const result = await lastValueFrom(controller.convertCurrency(body as any));
 
@@ -74,8 +74,8 @@ describe('CurrencyController', () => {
       expect(result.data).toBeNull();
     });
 
-    it('should return error ApiResponse when service throws an error', async () => {
-      const body = { amount: 100, fromCurrency: 'USD', toCurrency: 'EUR' };
+    it('should return error in ApiResponse when service throws an error', async () => {
+      const body = { amount: 100, fromCurrency: 'USD', targetCurrency: 'EUR' };
       const errorMessage = 'Failed to convert currency';
       jest.spyOn(currencyService, 'convertCurrency').mockReturnValue(throwError(() => new Error(errorMessage)));
 

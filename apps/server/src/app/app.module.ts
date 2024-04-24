@@ -14,5 +14,5 @@ import { CachingModule } from './common/caching/caching.module';
   ],
   controllers: [AppController],
   providers: [],
-}) //
+})
 export class AppModule { }
