@@ -4,9 +4,6 @@ import { CoreModule } from '../../core/core.module';
 import { HistoryService } from '../../core/services/history/history.service';
 
 import { environment } from '../../environments/environment';
-import { registerLocaleData } from '@angular/common';
-import localeDe from '@angular/common/locales/de';
-import localeDeExtra from '@angular/common/locales/extra/de';
 import { Observable } from 'rxjs';
 import { HistoryEntry } from '../../core/interfaces/history.interface';
 
@@ -22,13 +19,7 @@ export class HistoryTableComponent {
 
   public currencyOptions = environment.CURRENCY_OPTIONS
 
-  constructor(private historyService: HistoryService) {
-    registerLocaleData(localeDe, 'de-DE', localeDeExtra);
-  }
-
-  public formatDate(date: string) {
-    return new Date(date).toLocaleTimeString([], { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-  }
+  constructor(private historyService: HistoryService) { }
 
   public clearHistory() {
     this.historyService.clearCalculationHistory()

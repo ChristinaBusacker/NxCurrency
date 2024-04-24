@@ -43,9 +43,4 @@ describe('HistoryTableComponent', () => {
       expect(data[0].inputAmount).toBe(100);
     });
   });
-
-  it('should format dates correctly', () => {
-    const formattedDate = component.formatDate('2022-01-01T12:00:00.000Z');
-    expect(formattedDate).toBe('1.1.2022, 13:00');
-  });
 });

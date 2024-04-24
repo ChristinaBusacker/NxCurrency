@@ -12,7 +12,7 @@ import localeDeExtra from '@angular/common/locales/extra/de';
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  title = 'frontend';
+
 
   constructor() {
     registerLocaleData(localeDe, 'de-DE', localeDeExtra);

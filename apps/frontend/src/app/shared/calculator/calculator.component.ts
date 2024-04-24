@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Observable, combineLatest, debounceTime, map, of, startWith } from 'rxjs';
+import { Observable, Subscription, combineLatest, debounceTime, map, of, startWith } from 'rxjs';
 import { CoreModule } from '../../core/core.module';
 import { CurrencyConversionService } from '../../core/services/currency-conversion/currency-conversion.service';
 import { HistoryService } from '../../core/services/history/history.service';
@@ -14,13 +14,15 @@ import { environment } from '../../environments/environment';
   templateUrl: './calculator.component.html',
   styleUrl: './calculator.component.scss',
 })
-export class CalculatorComponent implements OnInit {
+export class CalculatorComponent implements OnInit, OnDestroy {
   public inputValueControl = new FormControl(0);
   public inputCurrencyControl = new FormControl('EUR');
   public outputValueControl = new FormControl({ value: 0, disabled: true });
   public outputCurrencyControl = new FormControl('USD');
 
   public defaultOptions = environment.CURRENCY_OPTIONS
+
+  private inputSubscription?: Subscription
 
   constructor(public currencyConversionService: CurrencyConversionService, private historyService: HistoryService) { }
 
@@ -52,7 +54,7 @@ export class CalculatorComponent implements OnInit {
       changes the currencies the first time
     */
 
-    combineLatest([
+    this.inputSubscription = combineLatest([
       this.inputValueControl.valueChanges.pipe(debounceTime(600)),
       this.inputCurrencyControl.valueChanges.pipe(startWith(this.inputCurrencyControl.value)),
       this.outputCurrencyControl.valueChanges.pipe(startWith(this.outputCurrencyControl.value)),
@@ -66,5 +68,9 @@ export class CalculatorComponent implements OnInit {
         })
       })
     ).subscribe();
+  }
+
+  public ngOnDestroy(): void {
+    this.inputSubscription?.unsubscribe()
   }
 }
