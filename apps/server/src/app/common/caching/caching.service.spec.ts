@@ -1,5 +1,5 @@
 import { CachingService } from './caching.service';
-import { Currency } from '@shared/interfaces/currency.interfaces';
+import { Currency } from '@shared/interfaces/currency.interface';
 
 describe('CachingService', () => {
   let service: CachingService;

@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { CurrencyService } from '../services/currency.service';
 import { catchError, map, of } from 'rxjs';
 import { ApiResponse } from '@shared/models/api-response.dto';

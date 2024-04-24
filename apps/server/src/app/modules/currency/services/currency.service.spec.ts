@@ -4,7 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { of } from 'rxjs';
 import { CurrencyService } from './currency.service';
 import { CachingService } from '../../../common/caching/caching.service';
-import { Currency, FreecurrencyapiResponse } from '@shared/interfaces/currency.interfaces';
+import { Currency } from '@shared/interfaces/currency.interface';
 
 const response: { data: { [key: string]: Currency } } = {
   data: {

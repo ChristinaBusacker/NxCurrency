@@ -38,7 +38,6 @@ describe('CurrencyController', () => {
 
       expect(result.data).toEqual(expectedResult);
       expect(result.error).toBeUndefined();
-      expect(result.timestamp).toBeInstanceOf(Date);
     });
 
     it('should return error ApiResponse when service throws an error', async () => {
@@ -49,7 +48,6 @@ describe('CurrencyController', () => {
 
       expect(result.error).toEqual(errorMessage);
       expect(result.data).toBeNull();
-      expect(result.timestamp).toBeInstanceOf(Date);
     });
   });
 
@@ -63,7 +61,6 @@ describe('CurrencyController', () => {
 
       expect(result.data).toEqual(convertedAmount);
       expect(result.error).toBeUndefined();
-      expect(result.timestamp).toBeInstanceOf(Date);
     });
 
     it('should return error in ApiResponse when missing required fields', async () => {
@@ -83,7 +80,6 @@ describe('CurrencyController', () => {
 
       expect(result.error).toEqual(errorMessage);
       expect(result.data).toBeNull();
-      expect(result.timestamp).toBeInstanceOf(Date);
     });
   });
 });

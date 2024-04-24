@@ -4,8 +4,6 @@ import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Observable, combineLatest, debounceTime, map, of, startWith } from 'rxjs';
 import { CoreModule } from '../../core/core.module';
 import { CurrencyConversionService } from '../../core/services/currency-conversion/currency-conversion.service';
-import { Currency } from '@shared/interfaces/currency.interface'
-import { ApiResponse } from '@shared/models/api-response.dto'
 import { HistoryService } from '../../core/services/history/history.service';
 import { environment } from '../../environments/environment';
 
@@ -24,21 +22,13 @@ export class CalculatorComponent implements OnInit {
 
   public defaultOptions = environment.CURRENCY_OPTIONS
 
-  /*
-    private availableCurrencies: Currency[] = [];
-    public availableCurrencies$: Observable<ApiResponse<Currency[]>> = of(new ApiResponse([]))
-
-    this.currencyConversionService.getAvailableCurrencies()
-    .subscribe((currencies: Currency[]) => this.availableCurrencies = currencies)
-  */
-
   constructor(public currencyConversionService: CurrencyConversionService, private historyService: HistoryService) { }
 
-  private convertCurrency(amount: number, fromCurrency: string, toCurrency: string): Observable<number | null> {
+  public convertCurrency(amount: number, fromCurrency: string, toCurrency: string): Observable<number | null> {
     return this.currencyConversionService.convertCurrency(amount, fromCurrency, toCurrency)
   }
 
-  public switchcurrencies(): void {
+  public switchCurrencies(): void {
     /*
       Simple value switching function between input and output controls.
       I set emitEvent to false to make sure that this isnt handled like
