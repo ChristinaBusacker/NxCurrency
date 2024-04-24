@@ -2,7 +2,7 @@ export class ApiResponse<T> {
     data?: T | null;
     error?: any;
     success = true;
-    timestamp: Date = new Date();
+    timestamp: string = new Date().toISOString();
 
     constructor(data: T | null = null, error?: any) {
         this.data = data;

@@ -1,18 +1,14 @@
-<table>
-    <thead>
-        <tr>
-            <th>Input Value</th>
-            <th>Input Currency</th>
-            <th>Output Value</th>
-            <th>Output Currency</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let entry of history">
-            <td>{{entry.inputAmount}}</td>
-            <td>{{entry.inputCurrency}}</td>
-            <td>{{entry.outputAmount}}</td>
-            <td>{{entry.outputCurrency}}</td>
-        </tr>
-    </tbody>
-</table>
+<section>
+    <h2>Verlauf</h2>
+    <div class="history">
+        <div *ngFor="let entry of history$ | async" class="history__entry">
+            <strong class="history__entry--time">{{formatDate(entry.timestamp)}}</strong>
+            <div>
+                <span>{{entry.inputAmount | currency: entry.inputCurrency:  'symbol' : '.2' : 'de-DE'}}</span>
+                <span> => </span>
+                <span>{{entry.outputAmount | currency: entry.outputCurrency:  'symbol' : '.2' : 'de-DE'}}</span>
+            </div>
+        </div>
+    </div>
+    <button class="link-btn history__clear" (click)="clearHistory()" >Verlauf löschen</button>
+</section>

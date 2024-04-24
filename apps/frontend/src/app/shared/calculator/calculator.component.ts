@@ -7,6 +7,7 @@ import { CurrencyConversionService } from '../../core/services/currency-conversi
 import { Currency } from '@shared/interfaces/currency.interface'
 import { ApiResponse } from '@shared/models/api-response.dto'
 import { HistoryService } from '../../core/services/history/history.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-calculator',
@@ -21,13 +22,15 @@ export class CalculatorComponent implements OnInit {
   public outputValueControl = new FormControl({ value: 0, disabled: true });
   public outputCurrencyControl = new FormControl('USD');
 
-  public defaultOptions = [
-    { symbol: "€", name: "Euro", decimal_digits: 2, code: "EUR" },
-    { symbol: "$", name: "US Dollar", decimal_digits: 2, code: "USD" },
-    { symbol: "£", name: "British Pound Sterling", decimal_digits: 2, code: "GBP" }
-  ]
-  private availableCurrencies: Currency[] = [];
-  public availableCurrencies$: Observable<ApiResponse<Currency[]>> = of(new ApiResponse([]))
+  public defaultOptions = environment.CURRENCY_OPTIONS
+
+  /*
+    private availableCurrencies: Currency[] = [];
+    public availableCurrencies$: Observable<ApiResponse<Currency[]>> = of(new ApiResponse([]))
+
+    this.currencyConversionService.getAvailableCurrencies()
+    .subscribe((currencies: Currency[]) => this.availableCurrencies = currencies)
+  */
 
   constructor(public currencyConversionService: CurrencyConversionService, private historyService: HistoryService) { }
 
@@ -73,9 +76,5 @@ export class CalculatorComponent implements OnInit {
         })
       })
     ).subscribe();
-
-
-    this.currencyConversionService.getAvailableCurrencies()
-      .subscribe((currencies: Currency[]) => this.availableCurrencies = currencies)
   }
 }

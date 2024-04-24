@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { registerLocaleData } from '@angular/common';
+import localeDe from '@angular/common/locales/de';
+import localeDeExtra from '@angular/common/locales/extra/de';
 
 @Component({
   standalone: true,
@@ -10,4 +13,8 @@ import { RouterModule } from '@angular/router';
 })
 export class AppComponent {
   title = 'frontend';
+
+  constructor() {
+    registerLocaleData(localeDe, 'de-DE', localeDeExtra);
+  }
 }

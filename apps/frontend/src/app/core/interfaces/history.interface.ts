@@ -1,5 +1,5 @@
 export interface HistoryEntry {
-    timestamp: Date,
+    timestamp: string,
     inputAmount: number,
     inputCurrency: string,
     outputAmount: number

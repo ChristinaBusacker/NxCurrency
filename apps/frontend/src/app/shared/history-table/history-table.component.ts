@@ -2,7 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CoreModule } from '../../core/core.module';
 import { HistoryService } from '../../core/services/history/history.service';
-import { HistoryEntry } from '@shared/interfaces/history.interface';
+
+import { environment } from '../../environments/environment';
+import { registerLocaleData } from '@angular/common';
+import localeDe from '@angular/common/locales/de';
+import localeDeExtra from '@angular/common/locales/extra/de';
+import { Observable } from 'rxjs';
+import { HistoryEntry } from '../../core/interfaces/history.interface';
 
 @Component({
   selector: 'app-history-table',
@@ -11,14 +17,20 @@ import { HistoryEntry } from '@shared/interfaces/history.interface';
   templateUrl: './history-table.component.html',
   styleUrl: './history-table.component.scss',
 })
-export class HistoryTableComponent implements OnInit {
-  public history: HistoryEntry[] = []
+export class HistoryTableComponent {
+  public history$: Observable<HistoryEntry[]> = this.historyService.getCalculationHistory()
 
-  constructor(private historyService: HistoryService) { }
+  public currencyOptions = environment.CURRENCY_OPTIONS
 
-  public ngOnInit(): void {
-    this.historyService.getCalculationHistory().subscribe(history => {
-      this.history = history
-    })
+  constructor(private historyService: HistoryService) {
+    registerLocaleData(localeDe, 'de-DE', localeDeExtra);
+  }
+
+  public formatDate(date: string) {
+    return new Date(date).toLocaleTimeString([], { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+  }
+
+  public clearHistory() {
+    this.historyService.clearCalculationHistory()
   }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { HistoryEntry } from '@shared/interfaces/history.interface'
+import { HistoryEntry } from '../../interfaces/history.interface'
 import { environment } from '../../../environments/environment';
 
 
@@ -25,6 +25,12 @@ export class HistoryService {
 
   public setCalculationHistoryEntry(entry: HistoryEntry): void {
     this.calculationHistory.push(entry);
+    localStorage.setItem(environment.HISTORYKEY.calulations, JSON.stringify(this.calculationHistory))
+    this.calculationHistorySubject$.next(this.calculationHistory)
+  }
+
+  public clearCalculationHistory(): void {
+    this.calculationHistory = [];
     localStorage.setItem(environment.HISTORYKEY.calulations, JSON.stringify(this.calculationHistory))
     this.calculationHistorySubject$.next(this.calculationHistory)
   }
