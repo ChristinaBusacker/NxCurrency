@@ -51,12 +51,16 @@ Fügen Sie Ihre API-Schlüssel für `freecurrencyapi` in die `.env`-Datei im `se
 
 ## Tests
 
-- **Jest Tests ausführen:**
-Für das Backend und das Frontend können Tests mit Jest durchgeführt werden:
+- **Tests ausführen:**
+Für das Backend und das Frontend können Tests mit Jest und Cypress durchgeführt werden:
 
 ```bash
 nx test frontend
 ```
 ```bash
+nx run frontend-e2e:e2e
+```
+```bash
 nx test server
 ```
+
