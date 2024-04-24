@@ -1,17 +1,26 @@
 <div>
-    <input type="number" [formControl]="inputValueControl" step="0.01" pattern="^\d*(\.\d{0,2})?$"/>
-    <select [formControl]="inputCurrencyControl">
+    <input 
+        type="number" 
+        data-cy="input-amount"
+        [formControl]="inputValueControl" 
+        step="0.01" 
+    />
+    <select [formControl]="inputCurrencyControl" data-cy="input-currency">
         <option *ngFor="let option of defaultOptions" [value]="option.code">{{option.symbol}}</option>
     </select>
 </div>
 
-<button class="switch" (click)="switchCurrencies()">
+<button class="switch" (click)="switchCurrencies()" data-cy="inout-switch">
     <img class="switch__img"src="assets/arrow-left-right-fill.svg" />
 </button>
 
 <div>
-    <input type="number" [formControl]="outputValueControl" pattern="^\d*(\.\d{0,2})?$"/>
-    <select [formControl]="outputCurrencyControl">
+    <input 
+        type="number" 
+        [formControl]="outputValueControl" 
+        data-cy="output-amount" 
+    />
+    <select [formControl]="outputCurrencyControl" data-cy="output-currency">
         <option *ngFor="let option of defaultOptions" [value]="option.code">{{option.symbol}}</option>
     </select>
 </div>
