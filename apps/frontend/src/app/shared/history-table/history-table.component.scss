@@ -4,12 +4,16 @@
         max-width: 580px;
     }
 
-    & .history {
-        display:flex;
-        flex-direction: column-reverse;
-        gap: 1rem;
+    .overflow-wrapper {
+        overflow-y: auto;
         max-height:50vh;
         overflow-y: auto;
+    }
+
+    & .history {
+        display: flex;
+        flex-direction: column-reverse;
+        gap: 1rem;
 
         &__entry {
             display: flex;

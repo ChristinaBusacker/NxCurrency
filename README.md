@@ -54,7 +54,9 @@ Fügen Sie Ihre API-Schlüssel für `freecurrencyapi` in die `.env`-Datei im `se
 - **Jest Tests ausführen:**
 Für das Backend und das Frontend können Tests mit Jest durchgeführt werden:
 
-   ```bash
- nx test frontend
-    nx test server
-   ```
+```bash
+nx test frontend
+```
+```bash
+nx test server
+```

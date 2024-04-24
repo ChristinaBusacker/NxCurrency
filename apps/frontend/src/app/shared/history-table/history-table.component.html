@@ -1,15 +1,18 @@
 <section>
     <h2>Verlauf</h2>
-    <div class="history" >
-        <div *ngFor="let entry of history$ | async" class="history__entry" data-cy="history-entry">
-            <strong class="history__entry--time">{{entry.timestamp | date: 'dd.MM.yyyy - HH:mm'}} Uhr</strong>
-            <div>
-                <span>{{entry.inputAmount | currency: entry.inputCurrency:  'symbol' : '.2' : 'de-DE'}}</span>
-                <span> => </span>
-                <span>{{entry.outputAmount | currency: entry.outputCurrency:  'symbol' : '.2' : 'de-DE'}}</span>
+    <div class="overflow-wrapper" >
+        <div class="history" >
+            <div *ngFor="let entry of history$ | async" class="history__entry" data-cy="history-entry">
+                <strong class="history__entry--time">{{entry.timestamp | date: 'dd.MM.yyyy - HH:mm'}} Uhr</strong>
+                <div>
+                    <span>{{entry.inputAmount | currency: entry.inputCurrency:  'symbol' : '.2' : 'de-DE'}}</span>
+                    <span> => </span>
+                    <span>{{entry.outputAmount | currency: entry.outputCurrency:  'symbol' : '.2' : 'de-DE'}}</span>
+                </div>
             </div>
         </div>
     </div>
+
     <button class="link-btn history__clear" (click)="clearHistory()" data-cy="clear-history">
         Verlauf löschen
     </button>
