@@ -12,6 +12,10 @@ export class HistoryService {
   private calculationHistory: HistoryEntry[] = []
 
   constructor() {
+    this.initLocalStorage();
+  }
+
+  private initLocalStorage():void {
     const historystring = localStorage.getItem(environment.HISTORYKEY.calulations)
     if (historystring) {
       this.calculationHistory = JSON.parse(historystring)
